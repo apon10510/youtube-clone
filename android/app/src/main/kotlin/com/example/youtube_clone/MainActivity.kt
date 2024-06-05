@@ -1,4 +1,4 @@
-package com.example.youtube_clone
+package com.example.youtube
 
 import io.flutter.embedding.android.FlutterActivity
 
