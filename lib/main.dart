@@ -1,8 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:youtube_clone/features/auth/login_page.dart';
+import 'package:youtube_clone/pages/home_page.dart';
+import 'package:youtube_clone/pages/user_name_page.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -29,13 +32,33 @@ class MyApp extends StatelessWidget {
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (!snapshot.hasData) {
             return const LoginPage();
-          } else {
-            return const Scaffold();
+          } else if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CircularProgressIndicator();
           }
+         return StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('user')
+                  .doc(
+                    FirebaseAuth.instance.currentUser!.uid,
+                  )
+                  .snapshots(),
+              builder: (b, AsyncSnapshot<dynamic> snapshot) {
+                if (!snapshot.hasData || !snapshot.data!.exists) {
+                  final user = FirebaseAuth.instance.currentUser;
+                  return UserNamePage(
+                    disPlayName: user!.displayName!,
+                    email: user.displayName!,
+                    profilePic: user.displayName!,
+                  );
+                }else if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CircularProgressIndicator();
+          }else{
+            return const HomePage();
+          }
+
+              });
         },
       ),
     );
   }
 }
-
-
