@@ -8,7 +8,7 @@ import 'package:youtube_clone/pages/home_page.dart';
 import 'package:youtube_clone/pages/user_name_page.dart';
 import 'firebase_options.dart';
 
-void main() async {
+void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
